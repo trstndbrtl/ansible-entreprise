@@ -1,5 +1,5 @@
 # Ansible Entreprise Workflow
--------------------------------
+
 Env builded by trstndbrtl with [RevuesdeCode.com](http://revuesdecode.com)
 
 ## Prerequisites
@@ -21,7 +21,7 @@ Current machine states:
 orchester                 running (virtualbox)
 production                running (virtualbox)
 staging                   running (virtualbox)
-development               running (virtualbox)
+develop                   running (virtualbox)
 This environment represents multiple VMs. The VMs are all listed
 above with their current state. For more information about a specific
 VM, run `vagrant status NAME`.

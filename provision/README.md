@@ -1,5 +1,4 @@
 # Ansible Entreprise
--------------------------------
 
 ## What happens when I launch `vagrant up`.
 When I run a `vagrant up`, Vagrant builds the orchester with the ochester object of the `orchester.yml` file. It is from the orckerter that we will work with Ansible.

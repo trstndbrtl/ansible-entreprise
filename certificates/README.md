@@ -1,5 +1,4 @@
 # Certificates
-----------------------------
 
 ### Configuration
 To change the hostname, open the `orchester.yaml` file and change the hostname variable.
