@@ -57,6 +57,8 @@ Vagrant.configure("2") do |config|
     orchester.vm.synced_folder "./sstm/orchester/etc/ansible", "/etc/ansible", owner: "root", group: "root", id: "ansible"
     # Share /home/vagrant folder
     orchester.vm.synced_folder "./sstm/orchester/home", "/home/vagrant", id: "home"
+    # Share /var/www folder
+    orchester.vm.synced_folder "./sstm/orchester/www", "/var/www", owner: "www-data", group: "www-data", id: "wwww"
 
     # IP allocation
     orchester.vm.network "private_network", ip: config_orchester['ip'], virtualbox__intnet: "servernetwork01"
