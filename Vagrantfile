@@ -56,7 +56,7 @@ Vagrant.configure("2") do |config|
     # Share /etc/ansible folder
     orchester.vm.synced_folder "./sstm/orchester/etc/ansible", "/etc/ansible", owner: "root", group: "root", id: "ansible"
     # Share /home/vagrant folder
-    orchester.vm.synced_folder "./sstm/orchester/home", "/home/vagrant", id: "home"
+    orchester.vm.synced_folder "./sstm/orchester/desktop/", "/home/vagrant/desktop", id: "home"
     # Share /var/www folder
     orchester.vm.synced_folder "./sstm/orchester/www", "/var/www", owner: "www-data", group: "www-data", id: "wwww"
 
