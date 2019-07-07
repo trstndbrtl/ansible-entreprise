@@ -1,0 +1,65 @@
+# Provision Vagrant Box
+# - ubuntu/trusty64
+# - ubuntu/xenial64
+# - ubuntu/bionic64
+# - debian/jessie64
+# - debian/stretch64
+#
+# Do not forget,
+# no special characters, no space, no dash 
+# or enderscore in name machine.
+# Site production
+production:
+  type: interne
+  name: "production"
+  group: "iprod"
+  groupchild: "master"
+  box: "ubuntu/bionic64"
+  ip: 192.168.1.51
+  hostname: "production.mm"
+  cpus: 1
+  memory : 1024
+# Site staging
+staging:
+  type: interne
+  name: "staging"
+  group: "istag"
+  groupchild: "drupal"
+  box: "ubuntu/bionic64"
+  ip: 192.168.1.52
+  hostname: "staging.mm"
+  cpus: 1
+  memory : 1024
+# Site develop
+develop:
+  type: interne
+  name: "develop"
+  group: "idev"
+  groupchild: "drupal"
+  box: "ubuntu/bionic64"
+  ip: 192.168.1.53
+  hostname: "develop.mm"
+  cpus: 1
+  memory : 1024
+# Site mattermost
+# mattermost:
+#   type: interne
+#   name: "mattermost"
+#   group: "imat"
+#   groupchild: "iprod"
+#   box: "ubuntu/bionic64"
+#   ip: 192.168.1.53
+#   hostname: "mattermost.mm"
+#   cpus: 1
+#   memory : 1024
+# Site gitlab
+# gitlab:
+#   type: interne
+#   name: "gitlab"
+#   group: "igit"
+#   groupchild: "docker"
+#   box: "ubuntu/bionic64"
+#   ip: 192.168.1.53
+#   hostname: "gitlab.mm"
+#   cpus: 1
+#   memory : 1024

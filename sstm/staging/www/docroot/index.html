@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>OrchesterMM</title>
+        <!-- UIkit CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.6/css/uikit.min.css" />
+    </head>
+    <body class="uk-section-primary uk-preserve-color" uk-height-viewport>
+        <!-- Menu navbar -->
+        <nav class="uk-navbar-container" uk-navbar>
+            <div class="uk-navbar-center">
+                <!-- Menu navbar left -->
+                <div class="uk-navbar-center-left">
+                    <div>
+                        <ul class="uk-navbar-nav">
+                            <li><a href="http://develop.mm">develop</a></li>
+                            <li><a href="http://staging.mm">staging</a></li>
+                            <li><a href="http://production.mm">production</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Menu navbar logo -->
+                <a class="uk-navbar-item uk-logo" href="#"><span uk-icon="icon: quote-right; ratio: 3.5"></span></a>
+                <!-- Menu navbar right -->
+                <div class="uk-navbar-center-right">
+                    <div>
+                        <ul class="uk-navbar-nav">
+                            <li class="uk-active"><a href="#">Contact</a></li>
+                            <li>
+                                <a href="#">Plus</a>
+                                <div class="uk-navbar-dropdown">
+                                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                                        <li class="uk-active"><a href="#">Se connecter</a></li>
+                                        <li><a href="#">S'enregister</a></li>
+                                        <li><a href="#">Mon mot de passe</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- Container -->
+        <div class="uk-section">
+            <div class="uk-container">
+                <div class="uk-grid-match uk-child-width-expand@m" uk-grid>
+                    <div>
+                        <div id="app" class="uk-panel uk-light">
+                            Hello Wolrd
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- UIkit JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.6/js/uikit.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.6/js/uikit-icons.min.js"></script>
+    </body>
+</html>
