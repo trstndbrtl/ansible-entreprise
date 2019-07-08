@@ -21,9 +21,40 @@ config_orchester = YAML.load_file(config_orchester_file)
 config_machines_file = "#{host_dir}/machines.yaml"
 config_machines = YAML.load_file(config_machines_file)
 
-# Environment deployed
-deployed_machines = "#{host_dir}/deploy.yaml"
-list_deployed_machine = YAML.load_file(deployed_machines)
+# Array of environments to build
+domains_machine = []
+
+# Array of hosts to set
+ansible_hosts = {}
+
+# Parse Machine config file
+config_machines.each do |cm|
+  # print sub_array
+  cm.each do |domain_on|
+    type_domain =  domain_on["type"]
+    # check if internal type machine
+    if !type_domain.nil? && !type_domain.empty? && type_domain == "interne"
+      # If it's an internal domain,
+      # add its machine name to the array of environments to build
+      domains_machine.push(domain_on["name"])
+    end
+    # Build array hosts ansible
+    if !type_domain.nil? && !type_domain.empty? && type_domain != "off"
+      # proces machine interne
+      if type_domain == "interne"
+        open("env-#{domain_on["group"]}", "a") do |f|
+          f << "#{domain_on["ip"]}\n"
+        end
+      end
+      # proces machine externe
+      if type_domain == "externe"
+        open("env-#{domain_on["group"]}", "a") do |f|
+          f << "#{domain_on["user"]}@#{domain_on["ip"]}\n"
+        end
+      end
+    end
+  end
+end
 
 # Here start multibox configurations
 Vagrant.configure("2") do |config|
@@ -62,7 +93,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Here start config_machines builder
-  list_deployed_machine.each do |machine|
+  domains_machine.each do |machine|
     # Set configuration
     config.vm.define "#{machine}" do |mchn|
 

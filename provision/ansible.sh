@@ -24,8 +24,21 @@ sudo cp -r /vagrant/certificates/id_rsa /home/vagrant/.ssh/id_rsa
 sudo chmod 400 /home/vagrant/.ssh/id_rsa
 sudo chown vagrant:vagrant /home/vagrant/.ssh/id_rsa
 
-# If not exist archive ansible hosts.ori file
-if [ ! -f "/etc/ansible/hosts.ori" ]; then
-    sudo mv /etc/ansible/hosts /etc/ansible/hosts.ori
-    sudo cp /etc/ansible/hosts.mm /etc/ansible/hosts
-fi
+# Archive hosts ansible file
+cd /vagrant/sstm/orchester/etc/ansible
+sudo mkdir -p /vagrant/sstm/orchester/etc/mm/transfert
+sudo cp /vagrant/sstm/orchester/etc/ansible/hosts /vagrant/sstm/orchester/etc/mm/hosts."$(date +"%d.%m-%I.%M.%S")"
+echo "" > /vagrant/sstm/orchester/etc/ansible/hosts
+
+# Store current hosts
+cd /vagrant
+ls . | grep "^env-" | while IFS='-' read -r an_env; do
+    sudo mv "${an_env}" /vagrant/sstm/orchester/etc/mm/transfert/${an_env:4}
+done
+
+cd /vagrant/sstm/orchester/etc/mm/transfert
+ls . | while IFS='' read -r an_env_config; do
+    echo -e "[$an_env_config]" >> ../../ansible/hosts
+    ls | grep $an_env_config | while read file; do cat $file >> ../../ansible/hosts; done;
+    echo >> ../../ansible/hosts
+done

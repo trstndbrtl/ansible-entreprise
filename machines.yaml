@@ -10,56 +10,56 @@
 # or enderscore in name machine.
 # Site production
 production:
-  type: interne
   name: "production"
+  # 3 type of machine
+  # off|interne|externe
+  type: "interne"
+  # Server group
   group: "iprod"
-  groupchild: "master"
-  box: "ubuntu/bionic64"
-  ip: 192.168.1.51
+  # Server subgroup
+  subgroup: "master"
+  # Ip & Hostname
+  ip: 192.168.89.38
   hostname: "production.mm"
+  user : mdf
+  # Configuration box
+  box: "ubuntu/bionic64"
   cpus: 1
   memory : 1024
 # Site staging
 staging:
-  type: interne
   name: "staging"
+  type: "interne"
   group: "istag"
-  groupchild: "drupal"
-  box: "ubuntu/bionic64"
-  ip: 192.168.1.52
+  subgroup: "drupal"
+  ip: 192.168.89.39
   hostname: "staging.mm"
+  user : mdf
+  box: "ubuntu/bionic64"
   cpus: 1
   memory : 1024
 # Site develop
 develop:
-  type: interne
   name: "develop"
+  type: "interne"
   group: "idev"
-  groupchild: "drupal"
-  box: "ubuntu/bionic64"
-  ip: 192.168.1.53
+  subgroup: "drupal"
+  ip: 192.168.89.40
   hostname: "develop.mm"
+  user : dev
+  box: "ubuntu/bionic64"
   cpus: 1
   memory : 1024
 # Site mattermost
-# mattermost:
-#   type: interne
-#   name: "mattermost"
-#   group: "imat"
-#   groupchild: "iprod"
-#   box: "ubuntu/bionic64"
-#   ip: 192.168.1.53
-#   hostname: "mattermost.mm"
-#   cpus: 1
-#   memory : 1024
 # Site gitlab
 # gitlab:
-#   type: interne
-#   name: "gitlab"
-#   group: "igit"
-#   groupchild: "docker"
-#   box: "ubuntu/bionic64"
-#   ip: 192.168.1.53
-#   hostname: "gitlab.mm"
-#   cpus: 1
-#   memory : 1024
+  # type: externe
+  # name: "gitlab"
+  # group: "imat"
+  # subgroup: "iprod"
+  # box: "ubuntu/bionic64"
+  # ip: 192.168.1.53
+  # hostname: "gitlab.mm"
+  # user : gitlab
+  # cpus: 1
+  # memory : 1024
