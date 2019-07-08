@@ -1,14 +1,10 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Verify if vagrant-vbguest plugin is installed
-unless Vagrant.has_plugin?("vagrant-vbguest")
-  raise 'Install vagrant-hostsupdater with: vagrant plugin install vagrant-vbguest'
-end
-
-# Verify if vagrant-hostsupdater plugin is installed
-unless Vagrant.has_plugin?("vagrant-hostsupdater")
-  raise 'Install vagrant-hostsupdater with: vagrant plugin install vagrant-hostsupdater'
+# Verify if vagrant-hostsupdater ans vagrant-vbguest plugin 
+required_plugins = %w( vagrant-hostsupdater vagrant-vbguest )
+required_plugins.each do |plugin|
+  system "vagrant plugin install #{plugin}" unless Vagrant.has_plugin? plugin
 end
 
 # Require YAML module
@@ -28,15 +24,6 @@ config_machines = YAML.load_file(config_machines_file)
 # Environment deployed
 deployed_machines = "#{host_dir}/deploy.yaml"
 list_deployed_machine = YAML.load_file(deployed_machines)
-
-# For each env, store hosts configuration in an array
-domains_machine = {}
-list_deployed_machine.each do |domain|
-  domains_machine[domain] = ["#{ config_machines[domain]['ip'] } #{ config_machines[domain]['hostname'] } #{ config_machines[domain]['name'] }"]
-end
-
-# Build pattern domain orchester host
-host_orchester = "#{ config_orchester['ip'] } #{ config_orchester['hostname'] } orchester"
 
 # Here start multibox configurations
 Vagrant.configure("2") do |config|
@@ -61,7 +48,8 @@ Vagrant.configure("2") do |config|
     orchester.vm.synced_folder "./sstm/orchester/www", "/var/www", owner: "www-data", group: "www-data", id: "wwww"
 
     # IP allocation
-    orchester.vm.network "private_network", ip: config_orchester['ip'], virtualbox__intnet: "servernetwork01"
+    orchester.vm.network "private_network", ip: config_orchester['ip']
+    # , virtualbox__intnet: true
 
     # Host name allocation
     orchester.vm.hostname = config_orchester['hostname']
@@ -69,15 +57,6 @@ Vagrant.configure("2") do |config|
     # Install Ansible and needed libraries
     orchester.vm.provision "Ansible", type: "shell" do |commons|
       commons.path = "provision/ansible.sh"
-      commons.args = host_orchester
-    end
-
-    # Store all domain environement in orchester /etc/hosts
-    list_deployed_machine.each do |dmn|
-      orchester.vm.provision "for-orchester-host-#{dmn}", type: "shell" do |domain|
-        domain.path = "provision/hosts.sh"
-        domain.args = domains_machine[dmn]
-      end
     end
 
   end
@@ -97,19 +76,14 @@ Vagrant.configure("2") do |config|
       end
 
       # Network
-      mchn.vm.network "private_network", ip: "#{config_machines[machine]['ip']}", virtualbox__intnet: "servernetwork01"
+      mchn.vm.network "private_network", ip: "#{config_machines[machine]['ip']}"
+      # , virtualbox__intnet: true
 
       # Host name machine allocation
       mchn.vm.hostname = "#{config_machines[machine]['hostname']}"
 
       # Share /var/www folder for each env
       mchn.vm.synced_folder "./sstm/#{config_machines[machine]['name']}/www", "/var/www", owner: "www-data", group: "www-data", id: "www"
-
-      # Set machine hosts configuration
-      mchn.vm.provision "shell" do |commons|
-        commons.path = "provision/hosts.sh"
-        commons.args = domains_machine[machine]
-      end
 
       # Set ssh configuration
       mchn.vm.provision "Store key ssh", type: "shell", path: "provision/ssh.sh"

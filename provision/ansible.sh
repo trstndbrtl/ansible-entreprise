@@ -29,16 +29,3 @@ if [ ! -f "/etc/ansible/hosts.ori" ]; then
     sudo mv /etc/ansible/hosts /etc/ansible/hosts.ori
     sudo cp /etc/ansible/hosts.mm /etc/ansible/hosts
 fi
-
-# Create a region to add domain in hosts file if not exist
-hostset=$(cat /etc/hosts | grep -c "# ENV-START")
-if [ $hostset -eq 0 ]; then
-echo -e "\n# ENV-START\n# ENV-END" >> /etc/hosts
-fi
-
-# Empty hosts file regions
-sudo sed -i '/# ENV-START/,/# ENV-END/{//!d}' /etc/hosts
-
-# Add domain orchester in hosts file
-gh="$1    $2 $3"
-sed -i "/# ENV-START/a $gh" /etc/hosts
