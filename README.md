@@ -12,6 +12,7 @@ Env builded by trstndbrtl with [RevuesdeCode.com](http://revuesdecode.com)
 
 ## About
 Deployed development environments with ansible.
+This box gives the possibility to manage a site park with Ansible.
 
 ``` bash
 C:\Users\tdb\Playground\Vagrant\ansible-entreprise
@@ -106,24 +107,26 @@ See [ReadMe.md](/certificates/README.md) certificates forlder.
 # or enderscore in name machine.
 mattermost: # !!! same as 'name'
   name: "mattermost"
-  group: "ubuntu"
-  box: "ubuntu/bionic64"
-  ip: 192.168.1.53
+  # 3 type of machine
+  # off|interne|externe
+  # "interne" mode run local machine
+  # "externe" mode run remoted server
+  type: "interne"
+  # Server group
+  group: "iprod"
+  # Server subgroup
+  subgroup: "master"
+  # Ip & Hostname
+  ip: 192.168.89.38
   hostname: "mattermost.mm"
+  user : mdf
+  # Configuration box
+  box: "ubuntu/bionic64"
   cpus: 1
   memory : 1024
 ```
 
-2. Add this new environment in `deploy.yaml` file list.
-``` yaml
-# environment to build
-- production
-- staging
-- development
-- mattermost
-```
-
-3. Create the folder of the shared files of the environment in the `sstm` (system) folder at the root of the project.
+2. Create the folder of the shared files of the environment in the `sstm` (system) folder at the root of the project.
 ``` yaml
 ANSIBLE-ENTREPRISE
 λ tree ansible-entreprise
