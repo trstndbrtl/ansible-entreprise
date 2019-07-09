@@ -27,35 +27,6 @@ domains_machine = []
 # Array of hosts to set
 ansible_hosts = {}
 
-# Parse Machine config file
-config_machines.each do |cm|
-  # print sub_array
-  cm.each do |domain_on|
-    type_domain =  domain_on["type"]
-    # check if internal type machine
-    if !type_domain.nil? && !type_domain.empty? && type_domain == "interne"
-      # If it's an internal domain,
-      # add its machine name to the array of environments to build
-      domains_machine.push(domain_on["name"])
-    end
-    # Build array hosts ansible
-    if !type_domain.nil? && !type_domain.empty? && type_domain != "off"
-      # proces machine interne
-      if type_domain == "interne"
-        open("env-#{domain_on["group"]}", "a") do |f|
-          f << "#{domain_on["ip"]}\n"
-        end
-      end
-      # proces machine externe
-      if type_domain == "externe"
-        open("env-#{domain_on["group"]}", "a") do |f|
-          f << "#{domain_on["user"]}@#{domain_on["ip"]}\n"
-        end
-      end
-    end
-  end
-end
-
 # Here start multibox configurations
 Vagrant.configure("2") do |config|
 
@@ -90,6 +61,45 @@ Vagrant.configure("2") do |config|
       commons.path = "provision/ansible.sh"
     end
 
+  end
+
+  # create folder for ansible hosts configuration
+  FileUtils.mkdir_p("sstm/orchester/etc/mm/transfert")
+  if !Dir.empty?('sstm/orchester/etc/mm/transfert')
+    FileUtils.rm_rf(Dir['sstm/orchester/etc/mm/transfert/*']) 
+  end
+
+  # Parse Machine config file
+  config_machines.each do |cm|
+    # print sub_array
+    cm.each do |domain_on|
+      type_domain =  domain_on["type"]
+      # check if internal type machine
+      if !type_domain.nil? && !type_domain.empty? && type_domain == "interne"
+        # If it's an internal domain,
+        # add its machine name to the array of environments to build
+        domains_machine.push(domain_on["name"])
+      end
+      # Build array hosts ansible
+      if !type_domain.nil? && !type_domain.empty? && type_domain != "off"
+
+        Dir.chdir("sstm/orchester/etc/mm/transfert") do
+          # proces machine interne
+          if type_domain == "interne"
+            open("#{domain_on["group"]}", "a") do |f|
+              f << "#{domain_on["ip"]}\n"
+            end
+          end
+          # proces machine externe
+          if type_domain == "externe"
+            open("#{domain_on["group"]}", "a") do |f|
+              f << "#{domain_on["user"]}@#{domain_on["ip"]}\n"
+            end
+          end
+
+        end      
+      end
+    end
   end
 
   # Here start config_machines builder
