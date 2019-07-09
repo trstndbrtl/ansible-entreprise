@@ -1,10 +1,12 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Verify if vagrant-hostsupdater ans vagrant-vbguest plugin 
-required_plugins = %w( vagrant-hostsupdater vagrant-vbguest )
-required_plugins.each do |plugin|
-  system "vagrant plugin install #{plugin}" unless Vagrant.has_plugin? plugin
+# Verify if vagrant-hostsupdater ans vagrant-vbguest plugin
+if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
+  required_plugins = %w( vagrant-hostsupdater vagrant-vbguest )
+  required_plugins.each do |plugin|
+    system "vagrant plugin install #{plugin}" unless Vagrant.has_plugin? plugin
+  end
 end
 
 # Require YAML module
