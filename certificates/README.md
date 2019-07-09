@@ -1,5 +1,8 @@
 # Certificates
 
+## Real Time
+If you work in production, regenerate the keys.
+
 ### Configuration
 To change the hostname, open the `orchester.yaml` file and change the hostname variable.
 If you change the orchester hostname, you will need to regenerate the id_rsa key.

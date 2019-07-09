@@ -1,7 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Verify if vagrant-hostsupdater ans vagrant-vbguest plugin
+# Check if is a window machine and
+# Verify if vagrant-hostsupdater and vagrant-vbguest plugin are present
 if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
   required_plugins = %w( vagrant-hostsupdater vagrant-vbguest )
   required_plugins.each do |plugin|
@@ -31,39 +32,6 @@ ansible_hosts = {}
 
 # Here start multibox configurations
 Vagrant.configure("2") do |config|
-
-  # Here start config_orchester builder
-  config.vm.define "orchester" , primary: true do |orchester|
-
-    # Box
-    orchester.vm.box = config_orchester['box']
-
-    # Memory and CPU allocation
-    orchester.vm.provider "virtualbox" do |v|
-      v.memory = config_orchester['memory']
-      v.cpus = config_orchester['cpus']
-    end
-
-    # Share /etc/ansible folder
-    orchester.vm.synced_folder "./sstm/orchester/etc/ansible", "/etc/ansible", owner: "root", group: "root", id: "ansible"
-    # Share /home/vagrant folder
-    orchester.vm.synced_folder "./sstm/orchester/desktop/", "/home/vagrant/desktop", id: "home"
-    # Share /var/www folder
-    orchester.vm.synced_folder "./sstm/orchester/www", "/var/www", owner: "www-data", group: "www-data", id: "wwww"
-
-    # IP allocation
-    orchester.vm.network "private_network", ip: config_orchester['ip']
-    # , virtualbox__intnet: true
-
-    # Host name allocation
-    orchester.vm.hostname = config_orchester['hostname']
-
-    # Install Ansible and needed libraries
-    orchester.vm.provision "Ansible", type: "shell" do |commons|
-      commons.path = "provision/ansible.sh"
-    end
-
-  end
 
   # create folder for ansible hosts configuration
   FileUtils.mkdir_p("sstm/orchester/etc/mm/transfert")
@@ -102,6 +70,39 @@ Vagrant.configure("2") do |config|
         end      
       end
     end
+  end
+
+  # Here start config_orchester builder
+  config.vm.define "orchester" , primary: true do |orchester|
+
+    # Box
+    orchester.vm.box = config_orchester['box']
+
+    # Memory and CPU allocation
+    orchester.vm.provider "virtualbox" do |v|
+      v.memory = config_orchester['memory']
+      v.cpus = config_orchester['cpus']
+    end
+
+    # Share /etc/ansible folder
+    orchester.vm.synced_folder "./sstm/orchester/etc/ansible", "/etc/ansible", owner: "root", group: "root", id: "ansible"
+    # Share /home/vagrant folder
+    orchester.vm.synced_folder "./sstm/orchester/desktop/", "/home/vagrant/desktop", id: "home"
+    # Share /var/www folder
+    orchester.vm.synced_folder "./sstm/orchester/www", "/var/www", owner: "www-data", group: "www-data", id: "wwww"
+
+    # IP allocation
+    orchester.vm.network "private_network", ip: config_orchester['ip']
+    # , virtualbox__intnet: true
+
+    # Host name allocation
+    orchester.vm.hostname = config_orchester['hostname']
+
+    # Install Ansible and needed libraries
+    orchester.vm.provision "Ansible", type: "shell" do |commons|
+      commons.path = "provision/ansible.sh"
+    end
+
   end
 
   # Here start config_machines builder

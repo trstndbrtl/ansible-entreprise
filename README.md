@@ -98,8 +98,8 @@ See [ReadMe.md](/provision/README.md) provision forlder.
 See [ReadMe.md](/certificates/README.md) certificates forlder.
 
 ## Add a new ENV
-
-1. Add environment declaration in `machines.yaml` file.
+#### Add a local environment
+1. Add environment declaration in `machines.yaml` file. Add `interne` option, register an ip, a hostname.
 ``` yaml
 # Site development
 # For the name
@@ -107,20 +107,12 @@ See [ReadMe.md](/certificates/README.md) certificates forlder.
 # or enderscore in name machine.
 mattermost: # !!! same as 'name'
   name: "mattermost"
-  # 3 type of machine
-  # off|interne|externe
-  # "interne" mode run local machine
-  # "externe" mode run remoted server
   type: "interne"
-  # Server group
   group: "iprod"
-  # Server subgroup
   subgroup: "master"
-  # Ip & Hostname
   ip: 192.168.89.38
   hostname: "mattermost.mm"
   user : mdf
-  # Configuration box
   box: "ubuntu/bionic64"
   cpus: 1
   memory : 1024
@@ -146,3 +138,49 @@ ANSIBLE-ENTREPRISE
 ```
 
 4. Run `vagrant up` or `vagrant reload`, followed by `--provision` flag, if necessary.
+
+
+
+#### Add a remoted environment
+1. Add environment declaration in `machines.yaml` file. Add `externe` option, register an ip, a hostname and the user name with which you will connect to the remote server.
+``` yaml
+# Site development
+# For the name
+# no special characters, no space, no dash 
+# or enderscore in name machine.
+creativ: # !!! same as 'name'
+  name: "creativ"
+  type: "externe"
+  group: "iprod"
+  subgroup: "master"
+  ip: 192.168.89.67
+  hostname: "my-remote-server.mm"
+  user : tristan
+  box: "ubuntu/bionic64"
+  cpus: null
+  memory : null
+```
+
+2. Then, copy your ssh key into the file of authorized_keys (~/.ssh/authorized_keys) of your remote server so you do not have to type your password for each ansible command. Be careful to create a personal and private ssh key if you connect to a remote server.
+```
+ssh-rsa
+AAAAB3NzaC1yc2EAAAADAQABAAABAQC0rvEnX8ihPXWWWz4U6ALlspBSsNLQA8qm1nC9ciKhik0iC
+jEwZ6vgf2Xkah9UKDV197gy4jzbxIwxuNiJjP7xOL4qoErpRK8mgTxtGOUpjXc6k7mHfVWcSpAyUa
+XYyd/uR+yGbjPfoSY6sl3wwN6d7QfVhNnuMJjLoLu7/vVyZ7aipKzKGyTvIFpDEsFruV7ox/o/
+lDuw/hZwdzhkqesHH9wvS+rxaK/gFzXrAKeenATW+/K8w6FMX9vuFEbIN0/
+e3vnzNck4YS8UrcmICnjb83EURa42Sx7+9n76t4QV3czMjH46YsOirwHMX9umzj9rHEge3g0m
++lDLU4POaEw9 vagrant@orchester.mm
+```
+
+When building the machines, the ssh address of your remote server will be added to the ansible hosts file (/etc/ansible/hosts).
+``` yaml
+[idev]
+192.168.89.40
+
+[iprod]
+192.168.89.38
+tristan@my-remote-server.mm
+
+[istag]
+192.168.89.39                                                 
+```
