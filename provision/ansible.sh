@@ -24,17 +24,11 @@ sudo cp -r /vagrant/certificates/id_rsa /home/vagrant/.ssh/id_rsa
 sudo chmod 400 /home/vagrant/.ssh/id_rsa
 sudo chown vagrant:vagrant /home/vagrant/.ssh/id_rsa
 
-# Archive hosts ansible file
+# Archive the hosts file ansible 
+# and regenerate a new one with the new configurations
 cd /vagrant/sstm/orchester/etc/ansible
-sudo mkdir -p /vagrant/sstm/orchester/etc/mm/transfert
 sudo cp /vagrant/sstm/orchester/etc/ansible/hosts /vagrant/sstm/orchester/etc/mm/hosts."$(date +"%d.%m-%I.%M.%S")"
 echo "" > /vagrant/sstm/orchester/etc/ansible/hosts
-
-# Store current hosts
-cd /vagrant
-ls . | grep "^env-" | while IFS='-' read -r an_env; do
-    sudo mv "${an_env}" /vagrant/sstm/orchester/etc/mm/transfert/${an_env:4}
-done
 
 cd /vagrant/sstm/orchester/etc/mm/transfert
 ls . | while IFS='' read -r an_env_config; do
